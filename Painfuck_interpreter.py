@@ -1,4 +1,4 @@
-class paintFuck:
+class Painfuck:
 
     def __init__(self, code, iterations, width, height):
         self.code = code
@@ -34,13 +34,13 @@ class paintFuck:
 
     def start(self):
         commands = {
-            "n": self.move_north,  # шаг вверх
-            "s": self.move_south,  # шаг вниз
-            "e": self.move_east,  # шаг влево
-            "w": self.move_west,  # шаг вправо
-            "*": self.switch_bit,  # меняем значение бита
-            "[": self.open_bracket,  # начало цикла
-            "]": self.closed_bracket  # конец цикла
+            "n": self.__move_north,  # шаг вверх
+            "s": self.__move_south,  # шаг вниз
+            "e": self.__move_east,  # шаг вправо
+            "w": self.__move_west,  # шаг влево
+            "*": self.__change_bit_value,  # меняем значение бита
+            "[": self.__open_bracket,  # проверка на вхождение в цикл и перемещение на ], если текущий бит 0
+            "]": self.__closed_bracket  # проверка на выход из цикла и перемещение на [, если текущий бит 1
         }
 
         counter = 0
@@ -48,7 +48,6 @@ class paintFuck:
             if self.code[self.code_ptr] in commands.keys():
                 commands[self.code[self.code_ptr]]()
                 counter += 1
-
             self.code_ptr += 1
 
         result = []
@@ -60,28 +59,28 @@ class paintFuck:
 
         return "\r\n".join(result)
 
-    def switch_bit(self):
+    def __change_bit_value(self):
         if self.grid[self.y][self.x] == 1:
             self.grid[self.y][self.x] = 0
         else:
             self.grid[self.y][self.x] = 1
 
-    def open_bracket(self):
+    def __open_bracket(self):
         if self.grid[self.y][self.x] == 0:
             self.code_ptr = self.closed_brackets[self.code_ptr]
 
-    def closed_bracket(self):
+    def __closed_bracket(self):
         if self.grid[self.y][self.x] == 1:
             self.code_ptr = self.open_brackets[self.code_ptr]
 
-    def move_north(self):
+    def __move_north(self):
         self.y = (self.y - 1) % self.height
 
-    def move_south(self):
+    def __move_south(self):
         self.y = (self.y + 1) % self.height
 
-    def move_east(self):
+    def __move_east(self):
         self.x = (self.x + 1) % self.width
 
-    def move_west(self):
+    def __move_west(self):
         self.x = (self.x - 1) % self.width
