@@ -52,9 +52,7 @@ class Smallfuck:
             "]": self.__closed_bracket  # проверка на выход из цикла и перемещение на [, если текущий бит 1
         }
 
-        while self.code_pointer < len(self.code_list) \
-                and self.tape_pointer >= 0 \
-                and self.tape_pointer < len(self.tape_list):
+        while self.code_pointer < len(self.code_list) and 0 <= self.tape_pointer < len(self.tape_list):
             if self.code_list[self.code_pointer] in operations.keys():
                 operations[self.code_list[self.code_pointer]]()
 
